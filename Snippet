@@ -1,0 +1,36 @@
+private static List<Customer[]> UploadCustomersTenAtATime(List<Customer> customers)
+        {
+            //given a list of customers, I must ensure I upload them no more than 10 at a time
+            List<Customer[]> ListofCustArrays = new List<Customer[]>();
+
+            Customer[] customerSet = new Customer[10]; //we can only upload No More than 10 objects at a time so we create an array that will only hold 10
+
+            ListofCustArrays.Add(customerSet); //We know our List Will have at least 1 record (or else wtf are we even doing here) so it is safe to initialize with an array of objects.
+                                              //Now just because its an array of objects does not mean that all 10 of those objects will be initialized with data.we can have 1 out of 10  initalized and this still be valid
+
+            for (int i = 0; i < customers.Count; i++)
+            {
+                var lastCustomerSetInList = ListofCustArrays[ListofCustArrays.Count-1];
+
+                if (lastCustomerSetInList[lastCustomerSetInList.Length-1] == null) // we check if the last record we are on is null, if its null then this record set has room for more entries. 
+                {
+                    for (int y = 0; y < lastCustomerSetInList.Length; y++)
+                    {
+                        if(lastCustomerSetInList[y] == null)
+                        {
+                            lastCustomerSetInList[y] = customers[i];
+                            break;
+                        }
+                    }
+                }
+                else  //If it's not then we should create a new record set.
+                {
+                    Customer[] newCustomerSet = new Customer[10];
+                    newCustomerSet[0] = customers[i]; //initialize the first entry with our next customer from our list
+                    ListofCustArrays.Add(newCustomerSet); //add the new customer set to our list of customer sets
+                     //proceed to the next customer entry
+                }
+            }
+
+            return ListofCustArrays;
+        }
